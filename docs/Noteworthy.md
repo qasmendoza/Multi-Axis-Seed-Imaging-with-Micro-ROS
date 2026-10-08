@@ -67,7 +67,7 @@ Sireum 4.20260810.80aad0c2, macOS arm64. Full output in
 
 A stack trace rather than a diagnostic suggests a defect rather than a rejected model.
 
-### Why it mattered beyond the crash
+### Why I think it mattered
 
 `bin/verify.sh` scopes the sourcepath to `sysmlv2` with `aadl-lib`, so the project's own
 verification was never affected. The **CodeIVE "SysMLv2 Type Check" command passes the
