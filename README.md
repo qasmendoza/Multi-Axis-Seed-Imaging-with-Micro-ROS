@@ -6,9 +6,6 @@ contracts in GUMBO. HAMR generates the ROS 2 (C++) node for the Jetson, the micr
 (C) node for the ESP32, and a Slang reference implementation used for Logika
 verification and GUMBOX testing.
 
-Research Proficiency Examination, Department of Computer Science,
-Kansas State University.
-Major adviser: Dr. Mitchell L. Neilsen. Co-major adviser: Dr. John Hatcliff.
 
 ---
 
