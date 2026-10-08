@@ -1,0 +1,17 @@
+<!-- Content between markers will be preserved if codegen is rerun -->
+
+<launch>
+    <!-- LAUNCH ARGUMENTS - additions within these tags will be preserved when re-running Codegen -->
+    <!-- Declare launch arguments here, then reference them from a node's parameters, e.g.
+             <arg name="log_file" default="uros-demo.txt"/>
+         with, inside that node's config block:
+             <param name="log_file_name" value="$(var log_file)"/> -->
+    <!-- LAUNCH ARGUMENTS - additions within these tags will be preserved when re-running Codegen -->
+
+
+    <node pkg="seed_imaging_cpp_pkg" exec="jetson_scan_exe">
+        <!-- LAUNCH CONFIG jetson_scan - additions within these tags will be preserved when re-running Codegen -->
+        <!-- LAUNCH CONFIG jetson_scan - additions within these tags will be preserved when re-running Codegen -->
+    </node>
+
+</launch>

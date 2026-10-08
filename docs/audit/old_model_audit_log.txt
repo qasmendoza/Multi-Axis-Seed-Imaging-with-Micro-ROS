@@ -1,0 +1,76 @@
+
+######## Stage 0: the model exactly as it is
+   42 error line(s)
+   * file://MicroROS_Schematic.sysml
+     - [109, 19] no viable alternative at input 'attribute state'
+     - [114, 22] no viable alternative at input '(state'
+     - [114, 45] mismatched input '.' expecting {'default', '{', ';', '=', ':='}
+     - [114, 58] mismatched input 'implies' expecting {'default', '{', ';', '=', ':='}
+     - [115, 41] mismatched input '>=' expecting {'default', '{', ';', '=', ':='}
+     - [115, 67] mismatched input '<=' expecting {'default', '{', ';', '=', ':='}
+     - [116, 45] mismatched input '.' expecting {'default', '{', ';', '=', ':='}
+     - [116, 58] mismatched input 'implies' expecting {'default', '{', ';', '=', ':='}
+     - [116, 81] mismatched input '<' expecting {'default', '{', ';', '=', ':='}
+     - [116, 84] mismatched input '11400' expecting {RULE_ID, RULE_UNRESTRICTED_NAME}
+     - [117, 45] mismatched input '.' expecting {'default', '{', ';', '=', ':='}
+     - [117, 58] mismatched input 'implies' expecting {'default', '{', ';', '=', ':='}
+     - [117, 81] mismatched input '>' expecting {'default', '{', ';', '=', ':='}
+     - [191, 45] no viable alternative at input '.state'
+     - [191, 62] mismatched input '::' expecting {'default', '{', ';', '=', ':='}
+     - [191, 78] mismatched input '.' expecting {'default', '{', ';', '=', ':='}
+     - [191, 90] mismatched input ',' expecting {'default', '{', ';', '=', ':='}
+     - [192, 44] mismatched input '==' expecting {'default', '{', ';', '=', ':='}
+     - [192, 55] mismatched input '::' expecting {'default', '{', ';', '=', ':='}
+     - [192, 72] mismatched input '.' expecting {'default', '{', ';', '=', ':='}
+     - [192, 75] mismatched input ')' expecting {'default', '{', ';', '=', ':='}
+     - [194, 36] mismatched input '"1.2 power: brownout / overvoltage / off -> Failed"' expecting {'default', '{', ';', '=', ':='}
+     - [195, 21] extraneous input '(' expecting {'~', '$', RULE_ID, RULE_UNRESTRICTED_NAME}
+     - [195, 30] mismatched input '(' expecting {'default', '{', ';', '=', ':='}
+   ... (18 more lines)
+
+######## Stage 1: field 'state' renamed to 'railState'
+   3 error line(s)
+   * file://MicroROS_Schematic.sysml
+     - [503, 8] In-to-In connection requires destination component Motor_Z to be a direct subcomponent of source component L298N_Z
+     - [505, 8] In-to-In connection requires destination component Motor_X to be a direct subcomponent of source component L298N_X
+     - [507, 8] In-to-In connection requires destination component Motor_Y to be a direct subcomponent of source component L298N_Y
+
+######## Stage 2: the three in->in L298N->Motor connections removed
+   1 error line(s)
+   - GclResolver: There are multiple instances of ["MicroROS", "L298N_Driver_i"], currently only handling single instances
+
+######## Stage 3: typed literals in MR_HLR_4
+   1 error line(s)
+   - GclResolver: There are multiple instances of ["MicroROS", "L298N_Driver_i"], currently only handling single instances
+
+######## Stage 4: only one L298N / motor instance kept
+   2 error line(s)
+   * file://MicroROS_Schematic.sysml
+     - [338, 20] Could not resolve 'coilResistance_mOhm'.
+     - [338, 20] GclResolver: Could not resolve expression's type: coilResistance_mOhm >= 1000 &
+     coilResistance_mOhm <= 10000
+
+######## Stage 5: MR_HLR_12 / MR_HLR_13 removed
+   2 error line(s)
+   * file://MicroROS_Schematic.sysml
+     - [114, 21] GclResolver: Could not resolve expression's type: (railState == PowerRailState.NOMINAL_12V ___>:
+      railVoltage_mV >= 11400 &
+        railVoltage_mV <= 12600) &
+     (railState == PowerRailState.BROWNOUT ___>:
+       railVoltage_mV < 11400) &
+     (railState == PowerRailState.OVERVOLTAGE ___>:
+       railVoltage_mV > 12600)
+     - [115, 25] Incompatible types for binary operation 'U32' >= 'Z'.
+
+######## Stage 6: typed literals everywhere
+
+   Well-formed!
+
+######## Stage 7: code generation for the model's own target (--platform Microkit)
+   The file argument is currently ignored when the system-name is set
+   
+   Errors:
+   * file://MicroROS_Schematic.sysml
+     - [451, 4] Model must contain exactly one actual bound processor, found 2
+
+(scratch copies in /tmp/old_model_audit_mciiyous; the original file was not modified)

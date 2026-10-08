@@ -1,0 +1,134 @@
+
+==================== 1/7 HAMR Type Checking of sysmlv2/SeedImaging.sysml ====================
+Well-formed!
+
+==================== 2/7 HAMR SysMLv2 Logika Checking: integration constraints of the connections ====================
+Checking integration constraints of SeedImagingSystem_Instance.xPos
+Integration constraints verified!
+
+==================== 3/7 Slang type check of the generated code and contracts ====================
+Loading project ...
+
+Type checking module: SeedImagingSystem_Instance ...
+
+
+Programs are well-typed!
+
+==================== 4/7 Logika: StepperController (ESP32) and ScanController (Jetson) ====================
+Loading project ...
+
+Verifying module: SeedImagingSystem_Instance ...
+
+
+Logika verified! Verification time: 23.072s, Elapsed time: 25.366s
+
+==================== 5/7 Tests: manual unit tests, manual GUMBOX tests, property-based GUMBOX tests ====================
+Loading project ...
+
+Compiling module: SeedImagingSystem_Instance ...
+
+[36mDiscovery starting.[0m
+[36mDiscovery completed in 304 milliseconds.[0m
+[36mRun starting. Expected test count is: 2895[0m
+[32mStepperController_esp32_stepper_Test:[0m
+[32m- SI-MCU-1: after initialise, a 0-step query on each axis answers 0[0m
+[32m- SI-MCU-4, SI-MCU-7: Z +50 from home answers 50 on zPos only[0m
+[32m- SI-MCU-3: Z counts modulo one revolution (0 - 1 = 199, then 199 + 1 = 0)[0m
+[32m- SI-MCU-5: Z +401 is rejected, the position stays and is still acknowledged[0m
+[32m- SI-MCU-8, SI-MCU-11: X +25 (to +45 deg) answers 25 on xPos only[0m
+[32m- SI-MCU-9, SI-MCU-2: X +1 past +45 deg is rejected, tilt stays 25[0m
+[32m- SI-MCU-12, SI-MCU-15: Y -1 from home wraps to 199 on yPos only[0m
+[32m- SI-MCU-13: Y +1000 is rejected, the position stays[0m
+[32m- SI-MCU-6, SI-MCU-10, SI-MCU-14: a move on one axis leaves the other two where they are[0m
+[32m- Demo sequence from the prelim runbook (Part B): 50, 25, 100, 10 rejected, -25[0m
+[32mScanController_jetson_scan_Test:[0m
+[32m- SI-HOST-1: after initialise, a stray acknowledgement starts nothing[0m
+[32m- SI-HOST-11, SI-HOST-12: start 1 issues the first self-test move, Z +200[0m
+[32m- SI-HOST-11: a second start while a move is in flight is ignored[0m
+[32m- SI-HOST-13: a stray Z acknowledgement while X is awaited issues nothing[0m
+[32m- Self-test plan (start 1): six moves in order, each after the previous acknowledgement[0m
+[32m- SI-HOST-4, SI-HOST-8: a tilt move that would pass +45 deg halts the plan for good[0m
+[32mStepperController_esp32_stepper_GumboX_Manual_Tests:[0m
+[32m- compute_GUMBOX_manual_SI_MCU_2: tilt at +45 deg, +1 more is refused: tilt never passes +45 deg[0m
+[32m- compute_GUMBOX_manual_SI_MCU_3: Z wrap 199 + 1 -> 0[0m
+[32m- compute_GUMBOX_manual_SI_MCU_3: Z wrap 0 - 1 -> 199[0m
+[32m- compute_GUMBOX_manual_SI_MCU_3: Z one revolution (+200) returns to 0[0m
+[32m- compute_GUMBOX_manual_SI_MCU_4: Z +1 from home[0m
+[32m- compute_GUMBOX_manual_SI_MCU_4: Z largest bounded move +400[0m
+[32m- compute_GUMBOX_manual_SI_MCU_4: Z largest bounded move -400[0m
+[32m- compute_GUMBOX_manual_SI_MCU_5: Z oversize +401 is refused[0m
+[32m- compute_GUMBOX_manual_SI_MCU_5: Z oversize -401 is refused[0m
+[32m- compute_GUMBOX_manual_SI_MCU_5: Z extreme S32.Max is refused (no overflow)[0m
+[32m- compute_GUMBOX_manual_SI_MCU_5: Z extreme S32.Min is refused (no overflow)[0m
+[32m- compute_GUMBOX_manual_SI_MCU_6: Z move with X = 3, Y = 9 leaves X and Y unchanged[0m
+[32m- compute_GUMBOX_manual_SI_MCU_7: Z 0-step query is acknowledged with the position[0m
+[32m- compute_GUMBOX_manual_SI_MCU_8: X level to +45 deg[0m
+[32m- compute_GUMBOX_manual_SI_MCU_8: X level to -45 deg[0m
+[32m- compute_GUMBOX_manual_SI_MCU_8: X +45 to -45 deg in one move[0m
+[32m- compute_GUMBOX_manual_SI_MCU_9: X at +45 deg, +1 is refused[0m
+[32m- compute_GUMBOX_manual_SI_MCU_9: X at -45 deg, -1 is refused[0m
+[32m- compute_GUMBOX_manual_SI_MCU_9: X level, +26 is refused[0m
+[32m- compute_GUMBOX_manual_SI_MCU_9: X oversize +401 is refused[0m
+[32m- compute_GUMBOX_manual_SI_MCU_9: X extreme S32.Max is refused (no overflow)[0m
+[32m- compute_GUMBOX_manual_SI_MCU_9: X extreme S32.Min is refused (no overflow)[0m
+[32m- compute_GUMBOX_manual_SI_MCU_10: X move with Z = 57, Y = 150 leaves Z and Y unchanged[0m
+[32m- compute_GUMBOX_manual_SI_MCU_11: X 0-step query is acknowledged with the position[0m
+[32m- compute_GUMBOX_manual_SI_MCU_12: Y +200 wraps to the same position[0m
+[32m- compute_GUMBOX_manual_SI_MCU_12: Y -400 wraps to the same position[0m
+[32m- compute_GUMBOX_manual_SI_MCU_13: Y oversize +1000 is refused[0m
+[32m- compute_GUMBOX_manual_SI_MCU_14: Y move with Z = 5, X = -10 leaves Z and X unchanged[0m
+[32m- compute_GUMBOX_manual_SI_MCU_15: Y 0-step query is acknowledged with the position[0m
+[32m- compute_GUMBOX_manual_SI_MCU_16: X -20, -5 more: the published tilt -25 is within +/-45 deg[0m
+[32m- initialize_GUMBOX_manual_SI_MCU_1: initialise puts all axes at home[0m
+[32m- compute_GUMBOX_manual_failing_SI_MCU_A1: tilt pre-state +30 (beyond +/-45 deg) is rejected[0m
+[32m- compute_GUMBOX_manual_failing_SI_MCU_A1: Z pre-state 200 (not a rotary index) is rejected[0m
+[32mScanController_jetson_scan_GumboX_Manual_Tests:[0m
+[32m- compute_GUMBOX_manual_SI_HOST_2: start 0 publishes exactly one command[0m
+[32m- compute_GUMBOX_manual_SI_HOST_3: awaited Z ack: the next move goes out only now[0m
+[32m- compute_GUMBOX_manual_SI_HOST_4: awaited X ack at +25, next X +25 would pass +45 deg: halt[0m
+[32m- compute_GUMBOX_manual_SI_HOST_5: start keeps the tilt estimate (-10)[0m
+[32m- compute_GUMBOX_manual_SI_HOST_5: X ack updates the tilt estimate to the reported tilt[0m
+[32m- compute_GUMBOX_manual_SI_HOST_6: the controller then awaits the axis it commanded[0m
+[32m- compute_GUMBOX_manual_SI_HOST_7: last plan move: the plan index stays within the plan[0m
+[32m- compute_GUMBOX_manual_SI_HOST_8: halted, awaited-looking ack: stays halted[0m
+[32m- compute_GUMBOX_manual_SI_HOST_9: last move acknowledged: plan complete, nothing pending[0m
+[32m- compute_GUMBOX_manual_SI_HOST_10: X ack at -25 keeps the tilt estimate within +/-45 deg[0m
+[32m- compute_GUMBOX_manual_SI_HOST_11: move in flight: start is ignored[0m
+[32m- compute_GUMBOX_manual_SI_HOST_11: halted: start is ignored[0m
+[32m- compute_GUMBOX_manual_SI_HOST_12: idle, start 1: first self-test move (Z +200)[0m
+[32m- compute_GUMBOX_manual_SI_HOST_12: idle, start 2: first scan move (Z +25)[0m
+[32m- compute_GUMBOX_manual_SI_HOST_12: idle after a finished plan: start again[0m
+[32m- compute_GUMBOX_manual_SI_HOST_13: stray Z ack while X is awaited: ignored[0m
+[32m- compute_GUMBOX_manual_SI_HOST_14: awaited Z ack: next move issued[0m
+[32m- compute_GUMBOX_manual_SI_HOST_15: stray X ack while idle: only the estimate moves[0m
+[32m- compute_GUMBOX_manual_SI_HOST_16: awaited X ack at +25, next X -50: allowed[0m
+[32m- compute_GUMBOX_manual_SI_HOST_17: stray Y ack while Z is awaited: ignored[0m
+[32m- compute_GUMBOX_manual_SI_HOST_18: awaited Y ack: next move issued[0m
+[32m- initialize_GUMBOX_manual_SI_HOST_1: initialise starts idle[0m
+[32m- compute_GUMBOX_manual_failing_SI_HOST_A1: X ack of +30 (beyond +/-45 deg) is rejected[0m
+[32m- compute_GUMBOX_manual_failing_SI_HOST_A2: plan index past the plan end is rejected[0m
+[32m- compute_GUMBOX_manual_failing_SI_HOST_A2: awaited axis 3 (not an axis) is rejected[0m
+[32m- compute_GUMBOX_manual_failing_SI_HOST_A2: tilt estimate +26 is rejected[0m
+[32mStepperController_esp32_stepper_GumboX_UnitTests:[0m
+[32mScanController_jetson_scan_GumboX_UnitTests:[0m
+[36mRun completed in 15 seconds, 418 milliseconds.[0m
+[36mTotal number of tests run: 2895[0m
+[36mSuites: completed 12, aborted 0[0m
+[36mTests: succeeded 2895, failed 0, canceled 0, ignored 0, pending 0[0m
+[32mAll tests passed.[0m
+Property-based GUMBOX tests (SlangCheck vectors, one test each):
+  PBT_initialize: 20 run
+  PBT_compute_commands_in_range: 300 run
+  PBT_computewL_positions_and_commands_in_range: 1000 run
+  PBT_computewL_full_range_commands: 200 run
+  PBT_compute_events_in_range: 300 run
+  PBT_computewL_state_and_events_in_range: 1000 run
+
+==================== 6/7 the C / C++ code uses the model's constants ====================
+model constants in sync: STEPS_PER_REV=200, MAX_MOVE_STEPS=400, TILT_LIMIT_STEPS=25, MAX_SCAN_MOVES=1000, STEP_INTERVAL_MS=5, SETTLE_MS=80
+
+==================== 7/7 contract checks of the deployed C / C++ logic ====================
+stepper_logic: 2049811 checks, 0 failures
+scan_logic: 20196 states, 15709173 checks, 0 failures
+
+ALL CHECKS PASSED

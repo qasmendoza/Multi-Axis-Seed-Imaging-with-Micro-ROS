@@ -1,0 +1,99 @@
+# Content between markers will be preserved if codegen is rerun
+#
+# Firmware configuration for the micro-ROS packages in this directory.
+{
+    "names": {
+        # BUILD PROFILE - additions within these tags will be preserved when re-running Codegen
+        # Build profile -- seeded for a host-Linux micro-ROS build.  Embedded
+        # targets generally want -DBUILD_SHARED_LIBS=OFF throughout.
+        #
+        # The UCLIENT_PROFILE_* transport enabled here must agree with
+        # RMW_UXRCE_TRANSPORT below.
+        #
+        # MULTITHREAD adds internal locking to the XRCE session so that several
+        # threads may drive it concurrently.  Generated micro-ROS nodes never do:
+        # every node runs one rclc executor on one thread, and all port traffic is
+        # released through sendOutputs at dispatch completion.  micro_ros_setup's
+        # stock host profile turns this ON; it is off here because nothing in a
+        # generated node needs it and it is not free.
+        "microxrcedds_client": {
+            "cmake-args": [
+                "-DBUILD_SHARED_LIBS=ON",
+                "-DUCLIENT_PROFILE_UDP=ON",
+                "-DUCLIENT_PROFILE_MULTITHREAD=OFF"
+            ]
+        },
+        "microcdr": {
+            "cmake-args": [
+                "-DBUILD_SHARED_LIBS=ON"
+            ]
+        },
+        "rosidl_typesupport_microxrcedds_c": {
+            "cmake-args": [
+                "-DBUILD_SHARED_LIBS=ON"
+            ]
+        },
+        "rosidl_typesupport_microxrcedds_cpp": {
+            "cmake-args": [
+                "-DBUILD_SHARED_LIBS=ON"
+            ]
+        },
+        # BUILD PROFILE - additions within these tags will be preserved when re-running Codegen
+        "rcl": {
+            "cmake-args": [
+                "-DBUILD_TESTING=OFF",
+                # NOTE: this rcl block is only ever load-bearing on cross-compiled
+                # embedded targets, where micro_ros_setup overrides these defaults.  Its
+                # host config does not, so on host these restate values already in
+                # effect -- and if rcl is not rebuilt in the firmware workspace at all,
+                # the nodes just link the ROS distribution's librcl.
+                #
+                # Required for the rcl arguments in each node's node_options block
+                # (topic remap rules in particular) to be parsed.  rcl defaults this
+                # ON; micro_ros_setup turns it OFF in its embedded configs to save
+                # footprint, and this puts it back.
+                "-DRCL_COMMAND_LINE_ENABLED=ON",
+                # Generated nodes log through rcutils, which reaches stderr without
+                # rcl logging.  Routing a node's own records to /rosout additionally
+                # needs RCL_LOGGING_ENABLED=ON plus a backend -- rcl_logging_spdlog
+                # on host, rcl_logging_noop on embedded.  These follow the model:
+                # they are ON when some node declares a rosout out port.
+                "-DRCL_LOGGING_ENABLED=OFF",
+                "-DRCL_LOGGING_IMPLEMENTATION=rcl_logging_noop"
+            ]
+        },
+        "rcutils": {
+            "cmake-args": [
+                "-DENABLE_TESTING=OFF"
+            ]
+        },
+        "rmw_microxrcedds": {
+            "cmake-args": [
+                # Static entity pools, sized from the model.  Each generated node is
+                # its own executable, so these hold the largest node's entities
+                # rather than the sum over nodes.  Generated nodes create no services
+                # or clients.  Undersizing them makes entity creation fail silently.
+                #
+                # The publisher count is the model's 3 plus 0 for the /rosout
+                # publisher rcl_node_init creates per node when RCL_LOGGING_ENABLED is ON.
+                "-DRMW_UXRCE_MAX_NODES=1",
+                "-DRMW_UXRCE_MAX_PUBLISHERS=3",
+                "-DRMW_UXRCE_MAX_SUBSCRIPTIONS=3",
+                "-DRMW_UXRCE_MAX_SERVICES=0",
+                "-DRMW_UXRCE_MAX_CLIENTS=0",
+                # TRANSPORT AND TUNING - additions within these tags will be preserved when re-running Codegen
+                # Transport -- deployment configuration, seeded for a micro-ROS agent
+                # reachable over udp4 at 127.0.0.1:8888.
+                "-DRMW_UXRCE_TRANSPORT=udp",
+                "-DRMW_UXRCE_DEFAULT_UDP_IP=127.0.0.1",
+                "-DRMW_UXRCE_DEFAULT_UDP_PORT=8888",
+                # Stream and history depth bound how large a serialized message may be
+                # and how many may be in flight.  A message that does not fit is
+                # dropped without a diagnostic, so raise these if messages go missing.
+                "-DRMW_UXRCE_STREAM_HISTORY=32",
+                "-DRMW_UXRCE_MAX_HISTORY=10"
+                # TRANSPORT AND TUNING - additions within these tags will be preserved when re-running Codegen
+            ]
+        }
+    }
+}

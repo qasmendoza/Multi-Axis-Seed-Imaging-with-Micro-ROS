@@ -1,0 +1,20 @@
+Seeded bug (scratch copy only): the ESP32 accepts any bounded tilt move, even past +/-45 deg.
+
+== GUMBOX tests (manual + property-based), expected to FAIL ==
+- compute_GUMBOX_manual_SI_MCU_2: tilt at +45 deg, +1 more is refused: tilt never passes +45 deg *** FAILED ***
+- compute_GUMBOX_manual_SI_MCU_9: X at +45 deg, +1 is refused *** FAILED ***
+- compute_GUMBOX_manual_SI_MCU_9: X at -45 deg, -1 is refused *** FAILED ***
+- compute_GUMBOX_manual_SI_MCU_9: X level, +26 is refused *** FAILED ***
+- PBT_compute_commands_in_range_2 *** FAILED ***
+- PBT_compute_commands_in_range_10 *** FAILED ***
+- PBT_compute_commands_in_range_11 *** FAILED ***
+- PBT_compute_commands_in_range_26 *** FAILED ***
+- PBT_compute_commands_in_range_31 *** FAILED ***
+- PBT_compute_commands_in_range_36 *** FAILED ***
+- PBT_compute_commands_in_range_40 *** FAILED ***
+- PBT_compute_commands_in_range_44 *** FAILED ***
+
+== Logika proof of StepperController_esp32_stepper.scala, expected to FAIL ==
+  - [191, 5] Could not deduce that the pre-condition of seedimaging.SeedImaging.StepperController_Operational_Api#put_xPos holds
+
+RESULT: the seeded bug was caught by the GUMBOX tests AND by Logika.

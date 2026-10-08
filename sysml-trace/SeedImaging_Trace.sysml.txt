@@ -1,0 +1,61 @@
+/*============================================================================
+    Traceability: which part of the architecture satisfies which requirement.
+
+    Standard SysML v2 (requirement usages + satisfy relations).  Kept outside
+    ../sysmlv2 so that HAMR codegen only sees the architecture; open this folder
+    together with ../sysmlv2 in CodeIVE / SysIDE to browse the trace.
+  ============================================================================*/
+
+package SeedImaging_Trace {
+    private import SeedImaging::*;
+    private import SeedImaging_Requirements::*;
+
+    // the system instance the requirements are traced to
+    part seedImaging : SeedImagingSystem;
+
+    //---- system requirements -> architecture ---------------------------------
+    satisfy requirement sys1 : ThreeAxisRosControl by seedImaging;   // connections zCmd/xCmd/yCmd + Ros_Topic_Name
+    satisfy requirement sys2 : PositionFeedback by seedImaging;   // connections zPos/xPos/yPos
+    satisfy requirement sys3 : TiltLimit by seedImaging;   // enforced on both sides of the link
+    satisfy requirement sys4 : NoLostCommands by seedImaging.jetson.scan;   // one move in flight
+    satisfy requirement sys5 : ScanPlan by seedImaging.jetson.scan;   // plan execution
+    satisfy requirement sys6 : FailSafe by seedImaging;   // reject / halt / coils off
+
+    //---- StepperController (ESP32, micro-ROS): GUMBO clauses SI_MCU_* ----------
+    satisfy requirement mcu1 : HomeAtStartup by seedImaging.esp32.stepper;
+    satisfy requirement mcu2 : TiltNeverBeyond45 by seedImaging.esp32.stepper;
+    satisfy requirement mcu3 : RotaryModuloOneRevolution by seedImaging.esp32.stepper;
+    satisfy requirement mcu4 : TurntableExactMove by seedImaging.esp32.stepper;
+    satisfy requirement mcu5 : TurntableRejectOversize by seedImaging.esp32.stepper;
+    satisfy requirement mcu6 : TurntableAxisIsolation by seedImaging.esp32.stepper;
+    satisfy requirement mcu7 : TurntableAcknowledged by seedImaging.esp32.stepper;
+    satisfy requirement mcu8 : TiltExactMove by seedImaging.esp32.stepper;
+    satisfy requirement mcu9 : TiltRejectUnsafe by seedImaging.esp32.stepper;
+    satisfy requirement mcu10 : TiltAxisIsolation by seedImaging.esp32.stepper;
+    satisfy requirement mcu11 : TiltAcknowledged by seedImaging.esp32.stepper;
+    satisfy requirement mcu12 : YExactMove by seedImaging.esp32.stepper;
+    satisfy requirement mcu13 : YRejectOversize by seedImaging.esp32.stepper;
+    satisfy requirement mcu14 : YAxisIsolation by seedImaging.esp32.stepper;
+    satisfy requirement mcu15 : YAcknowledged by seedImaging.esp32.stepper;
+    satisfy requirement mcu16 : TiltAckInRange by seedImaging.esp32.stepper;
+
+    //---- ScanController (Jetson, ROS 2): GUMBO clauses SI_HOST_* --------------
+    satisfy requirement host1 : StartIdle by seedImaging.jetson.scan;
+    satisfy requirement host2 : OneCommandPerDispatch by seedImaging.jetson.scan;
+    satisfy requirement host3 : OneMoveInFlight by seedImaging.jetson.scan;
+    satisfy requirement host4 : TiltCommandsSafe by seedImaging.jetson.scan;
+    satisfy requirement host5 : TrackTilt by seedImaging.jetson.scan;
+    satisfy requirement host6 : AwaitCommandedAxis by seedImaging.jetson.scan;
+    satisfy requirement host7 : StateInRange by seedImaging.jetson.scan;
+    satisfy requirement host8 : HaltIsFinal by seedImaging.jetson.scan;
+    satisfy requirement host9 : NoMoveNoPending by seedImaging.jetson.scan;
+    satisfy requirement host10 : TiltEstimateInRange by seedImaging.jetson.scan;
+    satisfy requirement host11 : StartIgnoredWhenBusy by seedImaging.jetson.scan;
+    satisfy requirement host12 : StartLaunchesPlan by seedImaging.jetson.scan;
+    satisfy requirement host13 : TurntableStrayAckIgnored by seedImaging.jetson.scan;
+    satisfy requirement host14 : TurntableAckAdvancesPlan by seedImaging.jetson.scan;
+    satisfy requirement host15 : TiltStrayAckIgnored by seedImaging.jetson.scan;
+    satisfy requirement host16 : TiltAckAdvancesPlan by seedImaging.jetson.scan;
+    satisfy requirement host17 : YStrayAckIgnored by seedImaging.jetson.scan;
+    satisfy requirement host18 : YAckAdvancesPlan by seedImaging.jetson.scan;
+}

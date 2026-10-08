@@ -1,0 +1,2 @@
+6e26f80e68d16addceb21c614a1ecd6cb4b85fe1 2026-07-29
+source: https://github.com/santoslab/sysml-aadl-libraries

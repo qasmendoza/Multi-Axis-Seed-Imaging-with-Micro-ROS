@@ -1,0 +1,110 @@
+waiting for the ROS 2 graph (micro-ROS node + scan controller) ...
+
+=== Homing: query each axis with a 0-step move, then return it to 0 ===
+  z: at 0
+  x: at 0
+  y: at 0
+
+=== Part 1: ROS 2 -> micro-ROS, each motor commanded directly ===
+  PASS  Z +50: acknowledgement received
+  PASS  Z +50: exactly one ack, on /stepper/z/pos only (SI-MCU-7/11/15)
+  PASS  Z +50: position 50 == expected 50
+  PASS  X +25 (to +45 deg): acknowledgement received
+  PASS  X +25 (to +45 deg): exactly one ack, on /stepper/x/pos only (SI-MCU-7/11/15)
+  PASS  X +25 (to +45 deg): position 25 == expected 25
+  PASS  X +1 beyond +45 deg -> rejected: acknowledgement received
+  PASS  X +1 beyond +45 deg -> rejected: exactly one ack, on /stepper/x/pos only (SI-MCU-7/11/15)
+  PASS  X +1 beyond +45 deg -> rejected: position 25 == expected 25
+  PASS  X -25 (back to level): acknowledgement received
+  PASS  X -25 (back to level): exactly one ack, on /stepper/x/pos only (SI-MCU-7/11/15)
+  PASS  X -25 (back to level): position 0 == expected 0
+  PASS  Y -1 (wraps to 199): acknowledgement received
+  PASS  Y -1 (wraps to 199): exactly one ack, on /stepper/y/pos only (SI-MCU-7/11/15)
+  PASS  Y -1 (wraps to 199): position 199 == expected 199
+  PASS  Z +401 oversize -> rejected: acknowledgement received
+  PASS  Z +401 oversize -> rejected: exactly one ack, on /stepper/z/pos only (SI-MCU-7/11/15)
+  PASS  Z +401 oversize -> rejected: position 50 == expected 50
+  PASS  Z -50 (back home): acknowledgement received
+  PASS  Z -50 (back home): exactly one ack, on /stepper/z/pos only (SI-MCU-7/11/15)
+  PASS  Z -50 (back home): position 0 == expected 0
+  PASS  Y +1 (back home): acknowledgement received
+  PASS  Y +1 (back home): exactly one ack, on /stepper/y/pos only (SI-MCU-7/11/15)
+  PASS  Y +1 (back home): position 0 == expected 0
+
+=== Part 2: /scan/start 1 (self-test, 6 moves) ===
+  PASS  self-test: all 6 moves acknowledged (5.1 s)
+  PASS  self-test: commands follow the plan exactly, no extra move from the 2nd start
+  PASS  self-test: one move in flight at a time (largest observer skew 0.1 ms)
+  PASS  self-test: every acknowledged position matches the model
+  PASS  self-test: tilt never beyond +/-45 deg (SI-MCU-2)
+
+=== Part 2: /scan/start 2 (imaging scan, 18 moves) ===
+  PASS  imaging scan: all 18 moves acknowledged (4.8 s)
+  PASS  imaging scan: commands follow the plan exactly, no extra move from the 2nd start
+  PASS  imaging scan: one move in flight at a time (largest observer skew 0.1 ms)
+  PASS  imaging scan: every acknowledged position matches the model
+  PASS  imaging scan: tilt never beyond +/-45 deg (SI-MCU-2)
+
+34 checks passed, 0 failed
+tests/e2e/run_e2e_sim.sh: line 21:   624 Killed                  ros2 launch seed_imaging_cpp_pkg_bringup SeedImagingSystem_Instance.launch.py > "$LOG" 2>&1
+--- node log (excerpt) ---
+[esp32_stepper_exe-3] [INFO] [1790288281.409635332] [esp32_stepper]: Z turntable: moved -200 steps -> position 0
+[jetson_scan_exe-1] [INFO] [1790288281.410785896] [jetson_scan]: Z turntable acknowledged at position 0
+[jetson_scan_exe-1] [INFO] [1790288281.410844706] [jetson_scan]: plan complete (6 moves). Ready for the next start request.
+[jetson_scan_exe-1] [INFO] [1790288282.423937487] [jetson_scan]: start: running plan 2 (moves 6..23)
+[jetson_scan_exe-1] [INFO] [1790288282.424060875] [jetson_scan]: plan move 7/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288282.634166700] [esp32_stepper]: Z turntable: moved 25 steps -> position 25
+[jetson_scan_exe-1] [INFO] [1790288282.634689349] [jetson_scan]: Z turntable acknowledged at position 25
+[jetson_scan_exe-1] [INFO] [1790288282.634874956] [jetson_scan]: plan move 8/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288282.844814240] [esp32_stepper]: Z turntable: moved 25 steps -> position 50
+[jetson_scan_exe-1] [INFO] [1790288282.845386269] [jetson_scan]: Z turntable acknowledged at position 50
+[jetson_scan_exe-1] [INFO] [1790288282.845486704] [jetson_scan]: plan move 9/24: Z turntable +25 steps
+[jetson_scan_exe-1] [WARN] [1790288282.949709347] [jetson_scan]: start ignored: a move is still in flight
+[esp32_stepper_exe-3] [INFO] [1790288283.054312273] [esp32_stepper]: Z turntable: moved 25 steps -> position 75
+[jetson_scan_exe-1] [INFO] [1790288283.054776287] [jetson_scan]: Z turntable acknowledged at position 75
+[jetson_scan_exe-1] [INFO] [1790288283.055061079] [jetson_scan]: plan move 10/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288283.264079099] [esp32_stepper]: Z turntable: moved 25 steps -> position 100
+[jetson_scan_exe-1] [INFO] [1790288283.265287936] [jetson_scan]: Z turntable acknowledged at position 100
+[jetson_scan_exe-1] [INFO] [1790288283.265467393] [jetson_scan]: plan move 11/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288283.474129829] [esp32_stepper]: Z turntable: moved 25 steps -> position 125
+[jetson_scan_exe-1] [INFO] [1790288283.475052375] [jetson_scan]: Z turntable acknowledged at position 125
+[jetson_scan_exe-1] [INFO] [1790288283.475198290] [jetson_scan]: plan move 12/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288283.683509218] [esp32_stepper]: Z turntable: moved 25 steps -> position 150
+[jetson_scan_exe-1] [INFO] [1790288283.684659158] [jetson_scan]: Z turntable acknowledged at position 150
+[jetson_scan_exe-1] [INFO] [1790288283.684786574] [jetson_scan]: plan move 13/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288283.893219135] [esp32_stepper]: Z turntable: moved 25 steps -> position 175
+[jetson_scan_exe-1] [INFO] [1790288283.894437593] [jetson_scan]: Z turntable acknowledged at position 175
+[jetson_scan_exe-1] [INFO] [1790288283.894558849] [jetson_scan]: plan move 14/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288284.103480405] [esp32_stepper]: Z turntable: moved 25 steps -> position 0
+[jetson_scan_exe-1] [INFO] [1790288284.104730952] [jetson_scan]: Z turntable acknowledged at position 0
+[jetson_scan_exe-1] [INFO] [1790288284.105520590] [jetson_scan]: plan move 15/24: X tilt +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288284.313887650] [esp32_stepper]: X tilt: moved 25 steps -> position 25
+[jetson_scan_exe-1] [INFO] [1790288284.314826588] [jetson_scan]: X tilt acknowledged at position 25
+[jetson_scan_exe-1] [INFO] [1790288284.315162425] [jetson_scan]: plan move 16/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288284.524168709] [esp32_stepper]: Z turntable: moved 25 steps -> position 25
+[jetson_scan_exe-1] [INFO] [1790288284.525309395] [jetson_scan]: Z turntable acknowledged at position 25
+[jetson_scan_exe-1] [INFO] [1790288284.525423992] [jetson_scan]: plan move 17/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288284.735834292] [esp32_stepper]: Z turntable: moved 25 steps -> position 50
+[jetson_scan_exe-1] [INFO] [1790288284.737337352] [jetson_scan]: Z turntable acknowledged at position 50
+[jetson_scan_exe-1] [INFO] [1790288284.737483967] [jetson_scan]: plan move 18/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288284.947438906] [esp32_stepper]: Z turntable: moved 25 steps -> position 75
+[jetson_scan_exe-1] [INFO] [1790288284.948392730] [jetson_scan]: Z turntable acknowledged at position 75
+[jetson_scan_exe-1] [INFO] [1790288284.948612986] [jetson_scan]: plan move 19/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288285.156721005] [esp32_stepper]: Z turntable: moved 25 steps -> position 100
+[jetson_scan_exe-1] [INFO] [1790288285.157683022] [jetson_scan]: Z turntable acknowledged at position 100
+[jetson_scan_exe-1] [INFO] [1790288285.157775882] [jetson_scan]: plan move 20/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288285.366704224] [esp32_stepper]: Z turntable: moved 25 steps -> position 125
+[jetson_scan_exe-1] [INFO] [1790288285.370111450] [jetson_scan]: Z turntable acknowledged at position 125
+[jetson_scan_exe-1] [INFO] [1790288285.370222734] [jetson_scan]: plan move 21/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288285.579487176] [esp32_stepper]: Z turntable: moved 25 steps -> position 150
+[jetson_scan_exe-1] [INFO] [1790288285.580012536] [jetson_scan]: Z turntable acknowledged at position 150
+[jetson_scan_exe-1] [INFO] [1790288285.580113522] [jetson_scan]: plan move 22/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288285.788588924] [esp32_stepper]: Z turntable: moved 25 steps -> position 175
+[jetson_scan_exe-1] [INFO] [1790288285.789269084] [jetson_scan]: Z turntable acknowledged at position 175
+[jetson_scan_exe-1] [INFO] [1790288285.789360981] [jetson_scan]: plan move 23/24: Z turntable +25 steps
+[esp32_stepper_exe-3] [INFO] [1790288285.997886221] [esp32_stepper]: Z turntable: moved 25 steps -> position 0
+[jetson_scan_exe-1] [INFO] [1790288285.998864182] [jetson_scan]: Z turntable acknowledged at position 0
+[jetson_scan_exe-1] [INFO] [1790288285.998978526] [jetson_scan]: plan move 24/24: X tilt -25 steps
+[esp32_stepper_exe-3] [INFO] [1790288286.207842433] [esp32_stepper]: X tilt: moved -25 steps -> position 0
+[jetson_scan_exe-1] [INFO] [1790288286.208320652] [jetson_scan]: X tilt acknowledged at position 0
+[jetson_scan_exe-1] [INFO] [1790288286.208372604] [jetson_scan]: plan complete (24 moves). Ready for the next start request.

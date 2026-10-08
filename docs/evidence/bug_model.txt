@@ -1,0 +1,8 @@
+Seeded bug (scratch copy only): the Jetson now assumes tilt acks within +/-20 steps,
+but the ESP32 only guarantees +/-25 steps (SI-MCU-16).
+
+== HAMR SysMLv2 Logika checking of the connections, expected to FAIL ==
+Checking integration constraints of SeedImagingSystem_Instance.xPos
+  - [116, 8] Could not deduce that the integration constraints of SeedImagingSystem_Instance.xPos holds
+
+RESULT: the seeded integration-constraint error was caught by HAMR SysMLv2 Logika checking.

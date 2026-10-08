@@ -1,0 +1,50 @@
+# Sireum / Slang build output
+hamr/slang/out/
+out/
+.sireum/
+*.sireum.bak
+
+# Scala / sbt / mill
+target/
+project/target/
+project/project/
+.bloop/
+.metals/
+.bsp/
+
+# ROS 2 / colcon
+build/
+install/
+log/
+
+# Arduino
+firmware/**/build/
+*.elf
+*.bin
+*.map
+
+# compiled artefacts from bin/verify.sh
+*.o
+*.a
+*.so
+*.dSYM/
+bin/stepper_logic
+bin/scan_logic
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# scratch copies from seeded_bug_demo.sh
+*.seeded/
+*.scratch/
+*.orig
+*.rej
+
+# editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

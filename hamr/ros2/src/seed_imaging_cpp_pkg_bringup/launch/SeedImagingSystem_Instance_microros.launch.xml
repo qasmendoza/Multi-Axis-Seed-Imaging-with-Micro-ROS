@@ -1,0 +1,31 @@
+<!-- Content between markers will be preserved if codegen is rerun -->
+
+<!-- The micro-ROS half of the system, valid for a host deployment only.  On an
+     embedded target these nodes are flashed rather than launched, and the agent
+     may run elsewhere; in that case launch SeedImagingSystem_Instance_ros2.launch.xml alone.
+
+     The agent's transport must agree with RMW_UXRCE_TRANSPORT and the
+     RMW_UXRCE_DEFAULT_UDP_* settings in microros_apps/colcon.meta.  Those live in
+     a preserved block there, so changing them does not update the line below. -->
+
+<launch>
+    <!-- micro-ROS agent: bridges rmw_microxrcedds nodes to the ROS2 DDS world.
+         Invoked through `ros2 run` because the binary lives in the package's lib
+         directory rather than on PATH. -->
+    <executable cmd="ros2 run micro_ros_agent micro_ros_agent udp4 --port 8888" output="screen"/>
+
+    <!-- LAUNCH ARGUMENTS - additions within these tags will be preserved when re-running Codegen -->
+    <!-- Declare launch arguments here, then reference them from a node's parameters, e.g.
+             <arg name="log_file" default="uros-demo.txt"/>
+         with, inside that node's config block:
+             <param name="log_file_name" value="$(var log_file)"/> -->
+    <!-- LAUNCH ARGUMENTS - additions within these tags will be preserved when re-running Codegen -->
+
+
+    <node pkg="seed_imaging_microros_pkg" exec="esp32_stepper_exe">
+        <env name="RMW_IMPLEMENTATION" value="rmw_microxrcedds"/>
+        <!-- LAUNCH CONFIG esp32_stepper - additions within these tags will be preserved when re-running Codegen -->
+        <!-- LAUNCH CONFIG esp32_stepper - additions within these tags will be preserved when re-running Codegen -->
+    </node>
+
+</launch>

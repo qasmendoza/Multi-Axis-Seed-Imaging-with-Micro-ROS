@@ -1,0 +1,229 @@
+Dry run of docs/PRELIM_DEMO_RUNBOOK.md without hardware
+Ubuntu 22.04, ROS 2 Humble, micro-ROS agent (humble); this folder mounted at /work/SeedImaging_SysMLv2. 2026-09-24
+
+A. Sections 2 and 3 (Parts A and B), run against the simulation: SeedImagingSystem_Instance.launch.py starts
+   the micro-ROS agent (UDP), the host build of the generated ESP32 node and the generated Jetson node.
+   On the bench the same commands run against the ESP32 over USB serial.
+================================================================================================
+### Runbook section 2, bring-up check (Terminal 2)
+$ ros2 node list
+/esp32_stepper
+/jetson_scan
+
+### Runbook section 3, Part A
+$ ros2 node list
+/esp32_stepper
+/jetson_scan
+
+$ ros2 topic list
+/parameter_events
+/rosout
+/scan/start
+/stepper/x/cmd
+/stepper/x/pos
+/stepper/y/cmd
+/stepper/y/pos
+/stepper/z/cmd
+/stepper/z/pos
+
+$ ros2 topic info /stepper/z/cmd -v
+Publisher count: 1
+Node name: jetson_scan
+Node namespace: /
+Topic type: std_msgs/msg/Int32
+Endpoint type: PUBLISHER
+Subscription count: 1
+Node name: esp32_stepper
+Node namespace: /
+Topic type: std_msgs/msg/Int32
+Endpoint type: SUBSCRIPTION
+
+$ ros2 topic pub --help | grep -A2 -- --wait-matching
+  -w WAIT_MATCHING_SUBSCRIPTIONS, --wait-matching-subscriptions WAIT_MATCHING_SUBSCRIPTIONS
+                        Wait until finding the specified number of matching
+                        subscriptions. Defaults to 1 when using "-1"/"--
+                        once"/"--times", otherwise defaults to 0.
+
+### Runbook section 3, Part B (acknowledgements are collected by ros2 topic echo on all three /pos topics)
+
+$ ros2 topic pub --once /stepper/z/cmd std_msgs/msg/Int32 "{data: 50}"
+publishing #1: std_msgs.msg.Int32(data=50)
+
+$ ros2 topic pub --once /stepper/x/cmd std_msgs/msg/Int32 "{data: 25}"
+publishing #1: std_msgs.msg.Int32(data=25)
+
+$ ros2 topic pub --once /stepper/y/cmd std_msgs/msg/Int32 "{data: 100}"
+publishing #1: std_msgs.msg.Int32(data=100)
+
+$ ros2 topic pub --once /stepper/x/cmd std_msgs/msg/Int32 "{data: 10}"
+publishing #1: std_msgs.msg.Int32(data=10)
+
+$ ros2 topic pub --once /stepper/x/cmd std_msgs/msg/Int32 "{data: -25}"
+publishing #1: std_msgs.msg.Int32(data=-25)
+
+$ ros2 topic pub --once /scan/start std_msgs/msg/Int32 "{data: 1}"
+publishing #1: std_msgs.msg.Int32(data=1)
+
+$ ros2 topic pub --once /scan/start std_msgs/msg/Int32 "{data: 2}"
+publishing #1: std_msgs.msg.Int32(data=2)
+
+--- ros2 topic echo /stepper/z/pos (data values)
+data: 50 data: 50 data: 50 data: 75 data: 100 data: 125 data: 150 data: 175 data: 0 data: 25 data: 50 data: 75 data: 100 data: 125 data: 150 data: 175 data: 0 data: 25 data: 50 
+
+--- ros2 topic echo /stepper/x/pos (data values)
+data: 25 data: 25 data: 0 data: 25 data: -25 data: 0 data: 25 data: 0 
+
+--- ros2 topic echo /stepper/y/pos (data values)
+data: 100 data: 100 
+
+--- node log (excerpt)
+[jetson_scan_exe-1]: process started with pid [48001]
+[esp32_stepper_exe-3]: process started with pid [48005]
+[INFO] [1790281611.199965441] [jetson_scan]: ScanController ready. Start a plan with: ros2 topic pub --once /scan/start std_msgs/msg/Int32 "{data: 1}"  (1 = self-test, 2 = imaging scan, other = both)
+[INFO] [1790281612.214447535] [esp32_stepper]: StepperController ready: Z, X and Y at home, coils released
+[INFO] [1790281625.539382085] [esp32_stepper]: Z turntable: moved 50 steps -> position 50
+[INFO] [1790281625.540475153] [jetson_scan]: Z turntable at 50 (not a move of this plan; ignored)
+[INFO] [1790281628.575977959] [esp32_stepper]: X tilt: moved 25 steps -> position 25
+[INFO] [1790281628.577199624] [jetson_scan]: X tilt at 25 (not a move of this plan; ignored)
+[INFO] [1790281634.417047223] [esp32_stepper]: Y reserved: moved 100 steps -> position 100
+[INFO] [1790281634.418722596] [jetson_scan]: Y reserved at 100 (not a move of this plan; ignored)
+[WARN] [1790281636.960725514] [esp32_stepper]: X tilt: command 10 rejected (outside the model's limits), no motion
+[INFO] [1790281636.960958790] [jetson_scan]: X tilt at 25 (not a move of this plan; ignored)
+[INFO] [1790281640.643064677] [esp32_stepper]: X tilt: moved -25 steps -> position 0
+[INFO] [1790281640.644039858] [jetson_scan]: X tilt at 0 (not a move of this plan; ignored)
+[INFO] [1790281643.913132718] [jetson_scan]: start: running plan 1 (moves 0..5)
+[INFO] [1790281643.913262947] [jetson_scan]: plan move 1/6: Z turntable +200 steps
+[INFO] [1790281645.025163750] [esp32_stepper]: Z turntable: moved 200 steps -> position 50
+[INFO] [1790281645.027171121] [jetson_scan]: Z turntable acknowledged at position 50
+[INFO] [1790281645.027314041] [jetson_scan]: plan move 2/6: X tilt +25 steps
+[INFO] [1790281645.236918397] [esp32_stepper]: X tilt: moved 25 steps -> position 25
+[INFO] [1790281645.237544233] [jetson_scan]: X tilt acknowledged at position 25
+[INFO] [1790281645.237689186] [jetson_scan]: plan move 3/6: X tilt -50 steps
+[INFO] [1790281645.575602099] [esp32_stepper]: X tilt: moved -50 steps -> position -25
+[INFO] [1790281645.576360802] [jetson_scan]: X tilt acknowledged at position -25
+[INFO] [1790281645.576464347] [jetson_scan]: plan move 4/6: X tilt +25 steps
+[INFO] [1790281645.786497983] [esp32_stepper]: X tilt: moved 25 steps -> position 0
+[INFO] [1790281645.787193927] [jetson_scan]: X tilt acknowledged at position 0
+[INFO] [1790281645.787311310] [jetson_scan]: plan move 5/6: Y reserved +200 steps
+[INFO] [1790281646.893762071] [esp32_stepper]: Y reserved: moved 200 steps -> position 100
+[INFO] [1790281646.894700763] [jetson_scan]: Y reserved acknowledged at position 100
+[INFO] [1790281646.894795582] [jetson_scan]: plan move 6/6: Z turntable -200 steps
+[INFO] [1790281648.004672678] [esp32_stepper]: Z turntable: moved -200 steps -> position 50
+[INFO] [1790281648.005702837] [jetson_scan]: Z turntable acknowledged at position 50
+[INFO] [1790281648.005821036] [jetson_scan]: plan complete (6 moves). Ready for the next start request.
+[INFO] [1790281654.044288596] [jetson_scan]: start: running plan 2 (moves 6..23)
+[INFO] [1790281654.044381481] [jetson_scan]: plan move 7/24: Z turntable +25 steps
+[INFO] [1790281654.254016694] [esp32_stepper]: Z turntable: moved 25 steps -> position 75
+[INFO] [1790281654.254550768] [jetson_scan]: Z turntable acknowledged at position 75
+[INFO] [1790281654.254724698] [jetson_scan]: plan move 8/24: Z turntable +25 steps
+[INFO] [1790281654.464585611] [esp32_stepper]: Z turntable: moved 25 steps -> position 100
+[INFO] [1790281654.465842904] [jetson_scan]: Z turntable acknowledged at position 100
+[INFO] [1790281654.466072540] [jetson_scan]: plan move 9/24: Z turntable +25 steps
+[INFO] [1790281654.674912067] [esp32_stepper]: Z turntable: moved 25 steps -> position 125
+[INFO] [1790281654.675959661] [jetson_scan]: Z turntable acknowledged at position 125
+[INFO] [1790281654.676073224] [jetson_scan]: plan move 10/24: Z turntable +25 steps
+[INFO] [1790281654.885310560] [esp32_stepper]: Z turntable: moved 25 steps -> position 150
+[INFO] [1790281654.887745204] [jetson_scan]: Z turntable acknowledged at position 150
+[INFO] [1790281654.887868373] [jetson_scan]: plan move 11/24: Z turntable +25 steps
+[INFO] [1790281655.097320646] [esp32_stepper]: Z turntable: moved 25 steps -> position 175
+[INFO] [1790281655.098292608] [jetson_scan]: Z turntable acknowledged at position 175
+[INFO] [1790281655.098563203] [jetson_scan]: plan move 12/24: Z turntable +25 steps
+[INFO] [1790281655.307008464] [esp32_stepper]: Z turntable: moved 25 steps -> position 0
+[INFO] [1790281655.307982831] [jetson_scan]: Z turntable acknowledged at position 0
+[INFO] [1790281655.308203232] [jetson_scan]: plan move 13/24: Z turntable +25 steps
+[INFO] [1790281655.516590589] [esp32_stepper]: Z turntable: moved 25 steps -> position 25
+[INFO] [1790281655.517172487] [jetson_scan]: Z turntable acknowledged at position 25
+[INFO] [1790281655.517318153] [jetson_scan]: plan move 14/24: Z turntable +25 steps
+[INFO] [1790281655.726083246] [esp32_stepper]: Z turntable: moved 25 steps -> position 50
+[INFO] [1790281655.727015055] [jetson_scan]: Z turntable acknowledged at position 50
+[INFO] [1790281655.727105704] [jetson_scan]: plan move 15/24: X tilt +25 steps
+[INFO] [1790281655.936152538] [esp32_stepper]: X tilt: moved 25 steps -> position 25
+[INFO] [1790281655.937209185] [jetson_scan]: X tilt acknowledged at position 25
+[INFO] [1790281655.937294266] [jetson_scan]: plan move 16/24: Z turntable +25 steps
+[INFO] [1790281656.145768834] [esp32_stepper]: Z turntable: moved 25 steps -> position 75
+[INFO] [1790281656.146615732] [jetson_scan]: Z turntable acknowledged at position 75
+[INFO] [1790281656.146700645] [jetson_scan]: plan move 17/24: Z turntable +25 steps
+[INFO] [1790281656.355411240] [esp32_stepper]: Z turntable: moved 25 steps -> position 100
+[INFO] [1790281656.356434529] [jetson_scan]: Z turntable acknowledged at position 100
+[INFO] [1790281656.356571215] [jetson_scan]: plan move 18/24: Z turntable +25 steps
+[INFO] [1790281656.565608885] [esp32_stepper]: Z turntable: moved 25 steps -> position 125
+[INFO] [1790281656.566659853] [jetson_scan]: Z turntable acknowledged at position 125
+[INFO] [1790281656.566753168] [jetson_scan]: plan move 19/24: Z turntable +25 steps
+[INFO] [1790281656.775784189] [esp32_stepper]: Z turntable: moved 25 steps -> position 150
+[INFO] [1790281656.776964253] [jetson_scan]: Z turntable acknowledged at position 150
+[INFO] [1790281656.777125502] [jetson_scan]: plan move 20/24: Z turntable +25 steps
+[INFO] [1790281656.986332805] [esp32_stepper]: Z turntable: moved 25 steps -> position 175
+[INFO] [1790281656.987285033] [jetson_scan]: Z turntable acknowledged at position 175
+[INFO] [1790281656.987413134] [jetson_scan]: plan move 21/24: Z turntable +25 steps
+[INFO] [1790281657.196910328] [esp32_stepper]: Z turntable: moved 25 steps -> position 0
+[INFO] [1790281657.197392149] [jetson_scan]: Z turntable acknowledged at position 0
+[INFO] [1790281657.198427562] [jetson_scan]: plan move 22/24: Z turntable +25 steps
+[INFO] [1790281657.408120148] [esp32_stepper]: Z turntable: moved 25 steps -> position 25
+[INFO] [1790281657.409082188] [jetson_scan]: Z turntable acknowledged at position 25
+[INFO] [1790281657.409183827] [jetson_scan]: plan move 23/24: Z turntable +25 steps
+[INFO] [1790281657.618456566] [esp32_stepper]: Z turntable: moved 25 steps -> position 50
+[INFO] [1790281657.619398484] [jetson_scan]: Z turntable acknowledged at position 50
+[INFO] [1790281657.619532438] [jetson_scan]: plan move 24/24: X tilt -25 steps
+[INFO] [1790281657.828750804] [esp32_stepper]: X tilt: moved -25 steps -> position 0
+[INFO] [1790281657.829769036] [jetson_scan]: X tilt acknowledged at position 0
+[INFO] [1790281657.829819467] [jetson_scan]: plan complete (24 moves). Ready for the next start request.
+
+B. Section 1, Jetson build: a clean copy of hamr/ros2 with only ROS 2 Humble sourced (no rclc installed)
+================================================================================================
+rclc in /opt/ros/humble: 0
+=== plain 'colcon build' (only /opt/ros/humble sourced)
+Starting >>> seed_imaging_cpp_pkg_interfaces
+Finished <<< seed_imaging_cpp_pkg_interfaces [4.84s]
+Starting >>> seed_imaging_cpp_pkg
+Starting >>> seed_imaging_microros_pkg
+  Could not find a package configuration file provided by "rclc" with any of
+Failed   <<< seed_imaging_microros_pkg [0.69s, exited with code 1]
+Aborted  <<< seed_imaging_cpp_pkg [1.39s]
+Summary: 1 package finished [6.43s]
+  1 package failed: seed_imaging_microros_pkg
+  1 package aborted: seed_imaging_cpp_pkg
+=== 'colcon build --packages-skip seed_imaging_microros_pkg'
+Starting >>> seed_imaging_cpp_pkg_interfaces
+Finished <<< seed_imaging_cpp_pkg_interfaces [4.67s]
+Starting >>> seed_imaging_cpp_pkg
+Finished <<< seed_imaging_cpp_pkg [13.7s]
+Starting >>> seed_imaging_cpp_pkg_bringup
+Finished <<< seed_imaging_cpp_pkg_bringup [0.80s]
+Summary: 3 packages finished [19.4s]
+COLCON_IGNORE
+_local_setup_util_ps1.py
+_local_setup_util_sh.py
+local_setup.bash
+local_setup.ps1
+local_setup.sh
+local_setup.zsh
+seed_imaging_cpp_pkg
+seed_imaging_cpp_pkg_bringup
+seed_imaging_cpp_pkg_interfaces
+setup.bash
+setup.ps1
+setup.sh
+setup.zsh
+
+C. Section 2, seed_imaging_hardware.launch.py with a pseudo-terminal in place of the ESP32's serial port;
+   Ctrl-C is typed on a terminal (pty), as on the Jetson
+================================================================================================
+running before Ctrl-C:
+   49452 Ssl+ python3 /opt/ros/humble/bin/ros2 launch seed_imaging_cpp_pkg_bringup seed_imaging_hardware.launch.py dev:=/dev/pts/0
+   49474 Sl+  /opt/microros_ws/install/micro_ros_agent/lib/micro_ros_agent/micro_ros_agent serial --dev /dev/pts/0 -b 115200 --ros-args
+   49476 Sl+  /work/SeedImaging_SysMLv2/hamr/ros2/install/seed_imaging_cpp_pkg/lib/seed_imaging_cpp_pkg/jetson_scan_exe --ros-args
+ros2 launch exited after 0.2 s
+left running after Ctrl-C: nothing
+--- launch output (tail)
+[INFO] [launch]: All log files can be found below /tmp/ctrlc_roslog/2026-09-24-20-28-46-105151-vm-49452
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [micro_ros_agent-1]: process started with pid [49474]
+[INFO] [jetson_scan_exe-2]: process started with pid [49476]
+[micro_ros_agent-1] [1790281726.148158] info     | TermiosAgentLinux.cpp | init                     | running...             | fd: 3
+[micro_ros_agent-1] [1790281726.148816] info     | Root.cpp           | set_verbose_level        | logger setup           | verbose_level: 4
+[jetson_scan_exe-2] [INFO] [1790281726.171544285] [jetson_scan]: ScanController ready. Start a plan with: ros2 topic pub --once /scan/start std_msgs/msg/Int32 "{data: 1}"  (1 = self-test, 2 = imaging scan, other = both)
+[jetson_scan_exe-2] [INFO] [1790281726.171712339] [jetson_scan]: jetson_scan infrastructure set up
+^C[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[jetson_scan_exe-2] [INFO] [1790281731.989791165] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ERROR] [micro_ros_agent-1]: process has died [pid 49474, exit code -2, cmd '/opt/microros_ws/install/micro_ros_agent/lib/micro_ros_agent/micro_ros_agent serial --dev /dev/pts/0 -b 115200 --ros-args'].
+[INFO] [jetson_scan_exe-2]: process has finished cleanly [pid 49476]

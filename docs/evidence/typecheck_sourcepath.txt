@@ -1,0 +1,36 @@
+=== scoped to sysmlv2 (as bin/verify.sh does) ===
+Well-formed!
+
+=== project root, as CodeIVE invokes it ===
+java.lang.Error: Invalid 'None' operation 'get'.
+	at org.sireum.helper$.halt(helper.scala:42)
+	at org.sireum.$internal.PackageTrait.halt(PackageTrait.scala:63)
+	at org.sireum.$internal.PackageTrait.halt$(PackageTrait.scala:63)
+	at org.sireum.package$.halt(package.scala:28)
+	at org.sireum.None.get(Option.scala:183)
+	at org.sireum.hamr.sysml.stipe.TypeChecker.$anonfun$updateMembers$1(TypeChecker.scala:500)
+	at org.sireum.hamr.sysml.stipe.TypeChecker.$anonfun$updateMembers$1$adapted(TypeChecker.scala:481)
+	at org.sireum.IS.foreach(IS.scala:274)
+	at org.sireum.hamr.sysml.stipe.TypeChecker.updateMembers(TypeChecker.scala:481)
+	at org.sireum.hamr.sysml.stipe.TypeChecker.checkPackage(TypeChecker.scala:183)
+	at org.sireum.hamr.sysml.stipe.TypeChecker$.$anonfun$checkDefinitions$1(TypeChecker.scala:43)
+	at org.sireum.hamr.sysml.stipe.TypeChecker$.$anonfun$checkDefinitions$1$adapted(TypeChecker.scala:40)
+	at org.sireum.IS.foreach(IS.scala:274)
+	at org.sireum.hamr.sysml.stipe.TypeChecker$.checkDefinitions(TypeChecker.scala:40)
+	at org.sireum.hamr.sysml.FrontEnd$.typeCheck(FrontEnd.scala:56)
+	at org.sireum.cli.HAMR$.sysmlRun(HAMR.scala:639)
+	at org.sireum.Sireum$.run(Sireum.scala:824)
+	at org.sireum.Sireum$.main(Sireum.scala:193)
+	at org.sireum.Sireum.main(Sireum.scala)
+
+=== sysmlv2 + sysml-trace (isolates the trigger) ===
+java.lang.Error: Invalid 'None' operation 'get'.
+	at org.sireum.helper$.halt(helper.scala:42)
+	at org.sireum.$internal.PackageTrait.halt(PackageTrait.scala:63)
+	at org.sireum.$internal.PackageTrait.halt$(PackageTrait.scala:63)
+	at org.sireum.package$.halt(package.scala:28)
+	at org.sireum.None.get(Option.scala:183)
+	at org.sireum.hamr.sysml.stipe.TypeChecker.$anonfun$updateMembers$1(TypeChecker.scala:500)
+	at org.sireum.hamr.sysml.stipe.TypeChecker.$anonfun$updateMembers$1$adapted(TypeChecker.scala:481)
+	at org.sireum.IS.foreach(IS.scala:274)
+	at org.sireum.hamr.sysml.stipe.TypeChecker.updateMembers(TypeChecker.scala:481)

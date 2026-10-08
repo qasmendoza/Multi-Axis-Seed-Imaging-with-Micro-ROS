@@ -1,0 +1,14 @@
+arduino-cli compile --fqbn espressif:esp32:nano_nora --warnings all   (esp32 core 2.0.17, micro_ros_arduino 2.0.8-humble with the esp32 -> esp32s3 copy; 2026-09-24,
+re-run after board.cpp was changed to the as-built pin map: Z = D13 D12 A0 A1, X = D8 D9 D10 D11, Y = D7 D6 D5 D4)
+
+firmware/SeedImagingStepper   (the HAMR-generated micro-ROS node + board.cpp)
+Library micro_ros_arduino has been declared precompiled:
+Using precompiled library in /home/claude/arduino/sketchbook/libraries/micro_ros_arduino/src/esp32s3
+Sketch uses 434421 bytes (13%) of program storage space. Maximum is 3145728 bytes.
+Global variables use 56572 bytes (17%) of dynamic memory, leaving 271108 bytes for local variables. Maximum is 327680 bytes.
+warnings in the sketch and the SeedImagingStepperNode library: 0
+
+firmware/MotorTest   (plain motor test, no ROS 2; same pin table and step pattern)
+Sketch uses 286849 bytes (9%) of program storage space. Maximum is 3145728 bytes.
+Global variables use 30560 bytes (9%) of dynamic memory, leaving 297120 bytes for local variables. Maximum is 327680 bytes.
+warnings in the sketch: 0

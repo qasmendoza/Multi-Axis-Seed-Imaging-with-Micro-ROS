@@ -1,0 +1,16 @@
+<!-- Content between markers will be preserved if codegen is rerun -->
+
+<!-- Brings up the whole system on a host.  Launch SeedImagingSystem_Instance_ros2.launch.xml on its own when
+     the micro-ROS nodes run on hardware rather than on this machine. -->
+
+<launch>
+    <!-- LAUNCH ARGUMENTS - additions within these tags will be preserved when re-running Codegen -->
+    <!-- Declare launch arguments here, then reference them from a node's parameters, e.g.
+             <arg name="log_file" default="uros-demo.txt"/>
+         with, inside that node's config block:
+             <param name="log_file_name" value="$(var log_file)"/> -->
+    <!-- LAUNCH ARGUMENTS - additions within these tags will be preserved when re-running Codegen -->
+
+    <include file="$(find-pkg-share seed_imaging_cpp_pkg_bringup)/launch/SeedImagingSystem_Instance_ros2.launch.xml"/>
+    <include file="$(find-pkg-share seed_imaging_cpp_pkg_bringup)/launch/SeedImagingSystem_Instance_microros.launch.xml"/>
+</launch>

@@ -1,0 +1,20 @@
+Seeded bug (scratch copy only): the Jetson starts a plan even while a move is in flight.
+
+== GUMBOX tests (manual + property-based), expected to FAIL ==
+- compute_GUMBOX_manual_SI_HOST_11: move in flight: start is ignored *** FAILED ***
+- PBT_computewL_state_and_events_in_range_3 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_53 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_56 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_71 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_82 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_93 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_95 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_104 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_119 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_121 *** FAILED ***
+- PBT_computewL_state_and_events_in_range_133 *** FAILED ***
+
+== Logika proof of ScanController_jetson_scan.scala, expected to FAIL ==
+  - [160, 38] Could not deduce that the postcondition holds
+
+RESULT: the seeded bug was caught by the GUMBOX tests AND by Logika.
