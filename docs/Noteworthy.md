@@ -24,7 +24,7 @@ all.
 The failure mode is silent. Nothing in the output distinguishes a suite that verified
 2,820 meaningful cases from one that verified almost none.
 
-**What we changed.** Narrowed the SlangCheck generators to the in-range values the
+**What I changed.** Narrowed the SlangCheck generators to the in-range values the
 preconditions admit, and set `failOnUnsatPreconditions = T` so an unsatisfied precondition
 is an error rather than a pass.
 
@@ -33,7 +33,7 @@ is an error rather than a pass.
 tests. With the defaults, the same injected fault would be far less likely to be sampled
 into the region where it manifests.
 
-We think this is a usability issue rather than a defect — the defaults are reasonable for
+I think this is a usability issue rather than a defect — the defaults are reasonable for
 components with wide-open preconditions — but the silence is the problem. A test count
 that is large and meaningless looks exactly like a test count that is large and meaningful.
 
@@ -112,6 +112,39 @@ non-`.sysml` extension — works but reads as a workaround rather than a convent
 
 ---
 
+## Any `.sysml` file in the workspace affects the project-root type check
+
+A second instance of the same underlying behaviour, with a different cause.
+
+An April 2026 schematic, `MicroROS_Schematic.sysml`, sat in the project root. It is
+superseded by the current model, imported by nothing, and referenced by nothing. It uses
+`state` as an identifier, which is a reserved word in HAMR 4.20260810, so it produces
+around forty parse errors.
+
+Those errors block the project-root type check entirely:
+
+```
+$ sireum hamr sysml tipe --sourcepath .
+* file:///.../MicroROS_Schematic.sysml
+  - [109, 19] no viable alternative at input 'attribute state'
+  - [114, 22] no viable alternative at input '(state'
+  ... (40 further parse errors)
+```
+
+Since the CodeIVE Type Check command passes the workspace root as sourcepath, an abandoned
+model four months old prevented the IDE from checking a current, well-formed one.
+
+**Resolved** by moving it to `docs/archive-2026-04/` with a `.txt` extension, which keeps
+it in version control and readable while removing it from discovery.
+
+**The general point.** Model discovery is directory-wide: every `.sysml` file under the
+sourcepath is parsed and type checked, whether or not anything references it. Combined
+with the `satisfy` crash above, two unrelated files — one holding traceability relations,
+one an abandoned sketch — each independently blocked the IDE's type check on a model that
+was itself well formed. Neither failure named the file responsible from inside the IDE.
+
+---
+
 ## Three obstacles between a correct install and a working CodeIVE
 
 Recorded because none produced an error message naming its cause, and together they cost
@@ -136,7 +169,7 @@ error is only visible when the binary is run directly from a terminal.
 `--user-data-dir` does not help: this build runs in portable mode and pins its data
 directory beside the application. A symlink does not help either, since the path is
 resolved before the socket is created. The installation has to physically live somewhere
-shorter. Ours is at `~/S`.
+shorter. Mine is at `~/S`.
 
 ### The HAMR commands resolve `sireum` from a path that cannot be overridden
 
@@ -149,7 +182,7 @@ terminated with exit code: 1
 ```
 
 Setting `SIREUM_HOME` in the shell had no effect. Neither did `launchctl setenv`, which is
-normally how a GUI application on macOS is given an environment variable. We did not find a
+normally how a GUI application on macOS is given an environment variable. I did not find a
 setting that changes it.
 
 The workaround was to make the path the extension uses point at the correct build:
@@ -257,7 +290,7 @@ name.
 `Compute_Execution_Time = 0 [ms] .. 2080 [ms]` is derived in the model from
 `MAX_MOVE_STEPS × STEP_INTERVAL_MS + SETTLE_MS`. On an MCU with no preemption in the
 application path, a worst-case bound that long is a real scheduling constraint rather than
-bookkeeping. We have not investigated what the AADL run-time services assume about
+bookkeeping. I have not investigated what the AADL run-time services assume about
 execution times of that magnitude on this class of target.
 
 ---
@@ -290,4 +323,4 @@ Noted as questions rather than claims.
 4. Where should `satisfy` relations live so they are version-controlled with the project
    but outside the HAMR sourcepath?
 
-The third and fourth are the ones we would most like an opinion on.
+The third and fourth are the ones I would most like an opinion on.
