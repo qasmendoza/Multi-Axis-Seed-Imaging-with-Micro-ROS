@@ -88,7 +88,7 @@ A passing suite only means something if it can fail. `bin/seeded_bug_demo.sh` in
 deliberate fault into a scratch copy and reports what catches it. Three cases, three
 different mechanisms.
 
-### `esp32` — the MCU accepts an unsafe tilt move
+### `esp32`: the MCU accepts an unsafe tilt move
 
 Caught twice, independently.
 
@@ -108,11 +108,11 @@ RESULT: the seeded bug was caught by the GUMBOX tests AND by Logika.
 ```
 
 The Logika failure is the more interesting of the two. It is not the compute guarantee
-that fails first — it is the precondition of `put_xPos`, the operational API call that
+that fails first; it is the precondition of `put_xPos`, the operational API call that
 publishes the acknowledgement. Weakening the tilt check means the component can no longer
 establish `SI-MCU-16` at the point it writes to the port.
 
-### `jetson` — the host starts a plan while a move is in flight
+### `jetson`: the host starts a plan while a move is in flight
 
 ```
 - compute_GUMBOX_manual_SI_HOST_11: move in flight: start is ignored *** FAILED ***
@@ -124,7 +124,7 @@ establish `SI-MCU-16` at the point it writes to the port.
 RESULT: the seeded bug was caught by the GUMBOX tests AND by Logika.
 ```
 
-### `model` — the two sides disagree about the tilt range
+### `model`: the two sides disagree about the tilt range
 
 The host is weakened to assume ±20 steps while the MCU still guarantees ±25.
 

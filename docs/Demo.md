@@ -63,9 +63,9 @@ Captured output in `evidence/`: `bug_esp32.txt`, `bug_jetson.txt`, `bug_model.tx
 
 ## 3. The model drives the hardware
 
-1. `bin/verify.sh` — seven checks pass
-2. `bin/hamr.sh` then `diff` — regeneration is byte-identical to what is deployed
-3. Change one value in `SeedImaging.sysml`, regenerate, reflash, re-run — the hardware moves
+1. `bin/verify.sh`: seven checks pass
+2. `bin/hamr.sh` then `diff`: regeneration is byte-identical to what is deployed
+3. Change one value in `SeedImaging.sysml`, regenerate, reflash, re-run: the hardware moves
    differently
 
 Step 3 takes roughly 20 minutes end to end, since it requires reflashing the MCU and

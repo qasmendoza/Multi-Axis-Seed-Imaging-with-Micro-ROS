@@ -111,7 +111,7 @@ single source of truth for the ROS interface.
 | `/stepper/y/pos` | `std_msgs::Int32` | ESP32 → Jetson | Y position after the command |
 
 Commands are **relative**; positions are **absolute**. An out-of-range command is
-**refused, not clamped** — the axis does not move and the current position is still
+**refused, not clamped**: the axis does not move and the current position is still
 acknowledged. Clamping would silently move an axis somewhere that was not requested.
 
 ---

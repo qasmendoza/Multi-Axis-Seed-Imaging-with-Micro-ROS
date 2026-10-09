@@ -8,7 +8,7 @@ property is stated by one component and depended on by the other.
 
 ## The pair
 
-**Producer side** — [`SI-MCU-16`](../sysmlv2/SeedImaging.sysml#L224), in the
+**Producer side**: [`SI-MCU-16`](../sysmlv2/SeedImaging.sysml#L224), in the
 `integration` section of [`StepperController`](../sysmlv2/SeedImaging.sysml#L181):
 
 ```
@@ -17,7 +17,7 @@ guarantee SI_MCU_16_tiltAckInRange
   SeedImaging::GUMBO__Library::isTiltSafe(xPos.data);
 ```
 
-**Consumer side** — [`SI-HOST-A1`](../sysmlv2/SeedImaging.sysml#L358), in the
+**Consumer side**: [`SI-HOST-A1`](../sysmlv2/SeedImaging.sysml#L358), in the
 `integration` section of [`ScanController`](../sysmlv2/SeedImaging.sysml#L317):
 
 ```
@@ -40,7 +40,7 @@ command is safe, and [`SI-HOST-10`](../sysmlv2/SeedImaging.sysml#L412) states th
 is always within ±45°.
 
 But `tiltEstimate` is only ever updated from what arrives on `xPos`. `SI-HOST-10` is
-therefore not provable from the host in isolation — it depends on what the other end of
+therefore not provable from the host in isolation; it depends on what the other end of
 the connection sends. `SI-HOST-A1` is the host naming that dependency, and `SI-MCU-16` is
 the MCU discharging it.
 
@@ -85,7 +85,7 @@ is covered by [`SI-HOST-14`](../sysmlv2/SeedImaging.sysml#L445) and
 [`SI-HOST-18`](../sysmlv2/SeedImaging.sysml#L481).
 
 The three command connections flow host to MCU. The MCU does not assume anything about
-command values — [`SI-MCU-5`](../sysmlv2/SeedImaging.sysml#L259),
+command values: [`SI-MCU-5`](../sysmlv2/SeedImaging.sysml#L259),
 [`SI-MCU-9`](../sysmlv2/SeedImaging.sysml#L277) and
 [`SI-MCU-13`](../sysmlv2/SeedImaging.sysml#L295) handle out-of-range values by refusing
 them. That is a deliberate choice: the MCU is the component with physical authority, and

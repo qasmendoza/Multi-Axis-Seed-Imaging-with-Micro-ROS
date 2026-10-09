@@ -1,4 +1,4 @@
-# Seed Imaging System — SysML v2 / HAMR
+# Seed Imaging System: SysML v2 / HAMR
 
 A three-axis seed imaging platform developed with HAMR. One SysML v2 model describes
 both processors, the two threads, the connections between them, and the behavioural
@@ -29,7 +29,7 @@ answered.
 
 ## The model
 
-[`sysmlv2/SeedImaging.sysml`](sysmlv2/SeedImaging.sysml) — the system, its two threads,
+[`sysmlv2/SeedImaging.sysml`](sysmlv2/SeedImaging.sysml): the system, its two threads,
 their ports, and 40 GUMBO clauses.
 
 HAMR is invoked twice, as recorded in the directives at the top of the model:
@@ -85,7 +85,7 @@ Slang/C++ verification gap, which is open work rather than a completed claim.
 ```
 sysmlv2/            SysML v2 models and the AADL libraries
 sysml-trace/        satisfy relations, held off the HAMR source path
-hamr/ros2/          generated ROS 2 (C++) and micro-ROS (C) — deployed
+hamr/ros2/          generated ROS 2 (C++) and micro-ROS (C), deployed
 hamr/slang/         generated Slang, Logika contracts, GUMBOX harnesses
 firmware/           ESP32 sketch, generated node library, and a no-ROS motor test
 bin/                hamr.sh, verify.sh, seeded_bug_demo.sh and helpers

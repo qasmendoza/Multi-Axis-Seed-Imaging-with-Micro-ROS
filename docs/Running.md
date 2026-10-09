@@ -12,8 +12,8 @@ only hand-written code in the system.
 
 | Component | Generated | Hand-written |
 | --- | --- | --- |
-| `ScanController` | `hamr/ros2` — node, ports, dispatch, plan scaffolding | the scan plans |
-| `StepperController` | `hamr/ros2` → `firmware/SeedImagingStepperNode` — node, ports, dispatch | `firmware/SeedImagingStepper/` — stepping, GPIO, pin map in `board.cpp` |
+| `ScanController` | `hamr/ros2`: node, ports, dispatch, plan scaffolding | the scan plans |
+| `StepperController` | `hamr/ros2` → `firmware/SeedImagingStepperNode`: node, ports, dispatch | `firmware/SeedImagingStepper/`: stepping, GPIO, pin map in `board.cpp` |
 
 `board.cpp` holds the pin table. It is hand-written and is the one place where the model's
 axis names meet physical pins, which is why
@@ -128,7 +128,7 @@ sudo docker run -it --rm -v /dev:/dev --privileged --net=host \
 ```
 
 Leave it running. Press reset on the ESP32 and watch for `create_participant`,
-`create_publisher` and `create_subscriber` lines — the client only attempts to connect at
+`create_publisher` and `create_subscriber` lines: the client only attempts to connect at
 boot, so a board that was already running when the agent started will not appear until it
 is reset.
 

@@ -140,7 +140,7 @@ Arduino IDE with the Arduino ESP32 Boards package and `micro_ros_arduino`.
 ## Operating notes
 
 **Positions reset on every ESP32 boot.** There are no homing switches, so
-[`SI-MCU-1`](../sysmlv2/SeedImaging.sysml#L230) — all axes at home at power-up — is an
+[`SI-MCU-1`](../sysmlv2/SeedImaging.sysml#L230), all axes at home at power-up, is an
 assumption about the deployment rather than a sensed fact. Level the tilt by hand before
 resetting, or the ±45° limit is enforced about the wrong zero.
 

@@ -15,8 +15,8 @@ The generated `*_GumboX_UnitTests` suites draw inputs with SlangCheck. In the de
 configuration the generators draw across the full range of the declared type, and
 `failOnUnsatPreconditions` defaults to `F`.
 
-For a component whose contracts are guarded by preconditions over a narrow range — tilt in
-`[-25, 25]`, rotary positions in `[0, 200)` — nearly every full-range draw fails the
+For a component whose contracts are guarded by preconditions over a narrow range (tilt in
+`[-25, 25]`, rotary positions in `[0, 200)`), nearly every full-range draw fails the
 precondition. A vector that fails its precondition is discharged vacuously. The suite
 reports a large number of passing tests while having exercised the contract almost not at
 all.
@@ -33,8 +33,8 @@ is an error rather than a pass.
 tests. With the defaults, the same injected fault would be far less likely to be sampled
 into the region where it manifests.
 
-I think this is a usability issue rather than a defect — the defaults are reasonable for
-components with wide-open preconditions — but the silence is the problem. A test count
+I think this is a usability issue rather than a defect, since the defaults are reasonable for
+components with wide-open preconditions, but the silence is the problem. A test count
 that is large and meaningless looks exactly like a test count that is large and meaningful.
 
 ---
@@ -82,7 +82,7 @@ names the sourcepath or the file responsible.
 
 The trace file is stored as `sysml-trace/SeedImaging_Trace.sysml.txt`. HAMR discovers model
 sources by the `.sysml` extension, so the file is no longer picked up as source. It remains
-version-controlled and readable, and `bin/trace_matrix.py` is unaffected — it builds the
+version-controlled and readable, and `bin/trace_matrix.py` is unaffected: it builds the
 traceability matrix from `SeedImaging_Requirements.sysml` and `SeedImaging.sysml` and never
 reads the trace file.
 
@@ -107,8 +107,8 @@ inside the trace file itself.
 ### Open question
 
 Where should traceability relations live so that they are version-controlled with the
-project, visible to a reader, and outside the HAMR sourcepath? The current answer — a
-non-`.sysml` extension — works but reads as a workaround rather than a convention.
+project, visible to a reader, and outside the HAMR sourcepath? The current answer, a
+non-`.sysml` extension, works but reads as a workaround rather than a convention.
 
 ---
 
@@ -139,8 +139,8 @@ it in version control and readable while removing it from discovery.
 
 **The general point.** Model discovery is directory-wide: every `.sysml` file under the
 sourcepath is parsed and type checked, whether or not anything references it. Combined
-with the `satisfy` crash above, two unrelated files — one holding traceability relations,
-one an abandoned sketch — each independently blocked the IDE's type check on a model that
+with the `satisfy` crash above, two unrelated files (one holding traceability relations,
+one an abandoned sketch) each independently blocked the IDE's type check on a model that
 was itself well formed. Neither failure named the file responsible from inside the IDE.
 
 ---
@@ -163,7 +163,7 @@ WARNING: IPC handle ".../codium-portable-data/user-data/1.12-main.sock"
 Error: listen EINVAL: invalid argument
 ```
 
-The application does not start. Launching with `open` produces **no output at all** — the
+The application does not start. Launching with `open` produces **no output at all**; the
 error is only visible when the binary is run directly from a terminal.
 
 `--user-data-dir` does not help: this build runs in portable mode and pins its data
@@ -240,7 +240,7 @@ natural decomposition would have.
 
 Logika proves properties of the generated **Slang**. The boards run the generated **C and
 C++**. Step 7 of `bin/verify.sh` bridges that by compiling the deployed C/C++ logic with
-gcc/g++ and executing it against the same contracts over a bounded input and state space —
+gcc/g++ and executing it against the same contracts over a bounded input and state space:
 2,049,811 checks for the stepper logic, 20,196 states and 15,709,173 checks for the scan
 logic.
 
@@ -251,8 +251,8 @@ The seeded-bug output makes the asymmetry visible: the injected ESP32 fault is c
 GUMBOX tests and by a Logika precondition, both on the Slang side. Step 7 is the only check
 that looks at what actually ships.
 
-A Clang-based analysis of the generated C/C++ — the static analyzer, CBMC, or symbolic
-execution — would give the deployed code the standing the reference implementation already
+A Clang-based analysis of the generated C/C++ (the static analyzer, CBMC, or symbolic
+execution) would give the deployed code the standing the reference implementation already
 has. This is open work and is noted here as a limitation rather than a result.
 
 ---
@@ -284,7 +284,7 @@ Two things that made this work in practice are not in the model and are worth re
 The generated library must be placed under a directory named for the chip family. The
 Arduino Nano ESP32 is an ESP32-S3, and `micro_ros_arduino` ships precompiled archives under
 `esp32`. Without an `esp32s3` copy the sketch compiles and then fails at link with
-undefined micro-ROS symbols — a confusing failure, since nothing points at the directory
+undefined micro-ROS symbols, a confusing failure since nothing points at the directory
 name.
 
 `Compute_Execution_Time = 0 [ms] .. 2080 [ms]` is derived in the model from
